@@ -5,22 +5,40 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-# each job is running on a sperate machine so we need to checkout the repo means setup node need to install dependencies
+
 jobs:
   unit-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
-      - run: npm ci
-      - run: npm test
+      - name: Checkout Repo and Setup Node
+        uses: actions/checkout@v3
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        id: npm-cache # 👀
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Unit Tests
+        run: npm test
 
   build:
-    runs-on: ubuntu-latest  # Corrected indentation
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node
+      - name: Checkout Repo and Setup Node
+        uses: actions/checkout@v3
+      - name: Install Dependencies
         uses: actions/setup-node@v3
-      - run: npm ci
-      - run: npm test
+        with:
+          node-version: '14'
+      - name: Cache NPM dependencies
+        uses: actions/cache@v3
+        id: npm-cache # 👀
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Build
+        run: npm run build
