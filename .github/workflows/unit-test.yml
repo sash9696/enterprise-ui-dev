@@ -5,11 +5,19 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-
+# each job is running on a sperate machine so we need to checkout the repo means setup node need to install dependencies
 jobs:
-  build-and-test:
+  unit-test:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm test
 
+  build:
+    runs-on: ubuntu-latest  # Corrected indentation
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node
