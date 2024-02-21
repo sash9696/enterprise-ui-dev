@@ -11,5 +11,6 @@ test(
   'it should increment when the "Increment" button is pressed',
   async () => {
     render(<Counter/>);
+    screen.debug();
   },
 );
