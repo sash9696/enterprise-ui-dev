@@ -6,5 +6,7 @@ test.todo('it should render the component', () => {});
 
 test.todo(
   'it should increment when the "Increment" button is pressed',
-  async () => {},
+  async () => {
+    render(<Counter/>);
+  },
 );
